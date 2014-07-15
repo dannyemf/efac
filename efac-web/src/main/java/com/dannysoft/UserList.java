@@ -6,6 +6,7 @@
 
 package com.dannysoft;
 
+import com.dannysoft.srv.UserService;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
@@ -20,9 +21,9 @@ import javax.inject.Named;
 public class UserList {
     
     @EJB
-    UserBean bean;
+    UserService  bean;
     
-    public int getCount(){
+    public long getCount(){
         return bean.count();
     }
     
