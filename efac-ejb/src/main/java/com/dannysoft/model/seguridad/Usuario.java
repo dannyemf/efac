@@ -2,19 +2,31 @@ package com.dannysoft.model.seguridad;
 
 
 import com.dannysoft.model.core.BaseEntity;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "usuario", schema = "seguridad")
 public class Usuario extends BaseEntity {
     
-    @Column()
+    @Column(unique = true, length = 25)
     private String username;
+    
+    @Column(nullable = false, length = 100)
+    private String password;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "poster")
-//    private Set<Tweet> tweets = new HashSet<Tweet>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="usuario_grupo", schema = "seguridad",
+      joinColumns={@JoinColumn(name="usuario_id", referencedColumnName="id")},
+      inverseJoinColumns={@JoinColumn(name="grupo_id", referencedColumnName="id")})
+    private Set<Grupo> grupos = new HashSet<Grupo>();
 
     public Usuario() {
         
@@ -37,11 +49,32 @@ public class Usuario extends BaseEntity {
         this.username = username;
     }
 
-//    public void setTweets(Set<Tweet> tweets) {
-//        this.tweets = tweets;
-//    }
-//
-//    public Set<Tweet> getTweets() {
-//        return tweets;
-//    }
+    /**
+     * @return the grupos
+     */
+    public Set<Grupo> getGrupos() {
+        return grupos;
+    }
+
+    /**
+     * @param grupos the grupos to set
+     */
+    public void setGrupos(Set<Grupo> grupos) {
+        this.grupos = grupos;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }

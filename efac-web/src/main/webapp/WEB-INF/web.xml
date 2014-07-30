@@ -4,6 +4,14 @@
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>server</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+        <param-value>true</param-value>
+    </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -13,6 +21,10 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.jsf</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -21,4 +33,56 @@
     <welcome-file-list>
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
+    
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Admin Area</web-resource-name>
+            <url-pattern>/faces/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>Administrator</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Manager Area</web-resource-name>
+            <url-pattern>/faces/manager/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>Manager</role-name>
+            <role-name>Administrator</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Guest Area</web-resource-name>
+            <url-pattern>/faces/guest/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>Guest</role-name>
+            <role-name>Manager</role-name>
+            <role-name>Administrator</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>efac-realm</realm-name>
+        <form-login-config>
+            <form-login-page>/faces/Login.xhtml</form-login-page>
+            <form-error-page>/faces/Login.xhtml</form-error-page>
+        </form-login-config>
+    </login-config>
+    <security-role>
+        <role-name>Administrator</role-name>
+    </security-role>
+    <security-role>
+        <role-name>Manager</role-name>
+    </security-role>
+    <security-role>
+        <role-name>Guest</role-name>
+    </security-role>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/faces/AccessDenied.xhtml</location>
+    </error-page>
 </web-app>
